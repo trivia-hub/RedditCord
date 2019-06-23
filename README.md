@@ -1,1 +1,3 @@
 # RedditCord
+
+Discord Reddit Client
