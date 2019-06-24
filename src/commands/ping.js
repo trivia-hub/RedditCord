@@ -14,3 +14,4 @@ export const run = async (client, msg) => {
 };
 
 export const name = 'ping';
+export const description = 'Test the bot\'s ping + latency';

@@ -8,3 +8,5 @@ export const run = (client, msg) => {
 };
 
 export const name = 'reload';
+export const description = 'Reload all commands';
+export const permissionLevel = 2;
