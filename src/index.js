@@ -1,9 +1,10 @@
 import chalk from 'chalk';
 import Client from './Classes/Discord';
-import { token } from '../config';
+import { token, owners } from '../config';
 
 const client = new Client({
   token,
+  owners,
   prefix: '+',
   disabledEvents: ['TYPING_START'],
   disableEveryone: true,

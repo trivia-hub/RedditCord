@@ -7,8 +7,10 @@ export default class Client extends Discord.Client {
     super(options);
     if (!options.token) throw new Error('No token was provided.');
     if (!options.prefix) throw new Error('No prefix was provided.');
+    if (!options.owners) throw new Error('No owner(s) were provided');
     this.commands = new Enmap();
     this.prefix = options.prefix;
+    this.owners = options.owners;
     this.login(options.token);
     this.on('message', this.handleMessage.bind(this));
     this.on('ready', this.handleConnected.bind(this));
@@ -41,6 +43,8 @@ export default class Client extends Discord.Client {
     const args = msg.content.slice(this.prefix.length).trim().split(/ +/g);
     const commandName = args.shift().toLowerCase();
     const command = this.commands.find(c => c.name === commandName);
+    if (!command.permissionLevel) command.permissionLevel = 0;
+    if (command.permissionLevel === 2 && !this.owners.includes(msg.author)) return;
     if (command) command.run(this, msg, args);
   }
 
