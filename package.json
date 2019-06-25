@@ -21,6 +21,7 @@
     "chalk": "^2.4.2",
     "discord.js": "git+https://github.com/discordjs/discord.js.git",
     "enmap": "^5.0.0",
+    "express": "^4.17.1",
     "mongodb": "^3.2.7"
   },
   "devDependencies": {
