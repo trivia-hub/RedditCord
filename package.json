@@ -20,7 +20,8 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "discord.js": "git+https://github.com/discordjs/discord.js.git",
-    "enmap": "^5.0.0"
+    "enmap": "^5.0.0",
+    "mongodb": "^3.2.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
