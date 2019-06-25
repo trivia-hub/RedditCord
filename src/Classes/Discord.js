@@ -44,7 +44,12 @@ export default class Client extends Discord.Client {
     const commandName = args.shift().toLowerCase();
     const command = this.commands.find(c => c.name === commandName);
     if (!command.permissionLevel) command.permissionLevel = 0;
-    if (command.permissionLevel === 2 && !this.owners.includes(msg.author)) return;
+    if (command.permissionLevel === 2 && !this.owners.includes(msg.author.id)) {
+      const embed = new Discord.MessageEmbed()
+        .setTitle('You don\'t have permission to use this command.');
+      msg.channel.send(embed);
+      return;
+    }
     if (command) command.run(this, msg, args);
   }
 

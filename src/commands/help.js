@@ -20,9 +20,9 @@ export const run = (client, msg, args) => {
         .addField(`**Command Description:** ${command.description}`, '[]()');
       if (command.args) {
         if (command.args.find(a => a.optional)) {
-          embed.addField('**Optional Arguments:**', command.args.filter(a => a.optional).map(a => a.name));
-        } else if (command.args.find(a => a.optional)) {
-          embed.addField('**Required Arguments:**', command.args.filter(a => !a.optional).map(a => a.name));
+          embed.addField('**Optional Argument(s):**', command.args.filter(a => a.optional).map(a => a.name));
+        } else if (command.args.find(a => !a.optional)) {
+          embed.addField('**Required Argument(s):**', command.args.filter(a => !a.optional).map(a => a.name));
         }
       }
       msg.channel.send(embed);
