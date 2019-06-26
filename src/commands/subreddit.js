@@ -48,13 +48,16 @@ export const run = async (client, msg, args) => {
     posts.splice(0, page * 5 + 1);
     const post = posts[index];
     embed.fields = [];
+    embed.image = null;
     embed
       .setTitle(post.title)
       .setURL(`https://reddit.com${post.permalink}`)
+      .setDescription(`**Submitted by [u/${post.author}](https://reddit.com/u/${post.author})**`)
       .setFooter(`${post.score} Upvotes | ${post.num_comments} Comments`);
     if (post.reddit_video) embed.setImage(post.reddit_video.fallback_url);
     if (post.post_hint === 'image') embed.setImage(post.url);
-    if (post.selftext) embed.setDescription(post.selftext);
+    if (post.selftext) post.selftextPostDesc = `**Submitted by [u/${post.author}](https://reddit.com/u/${post.author})**\n${post.selftext}`;
+    if (post.selftext) embed.setDescription(post.selftextPostDesc.slice(0, 2000));
     await m.edit(embed);
   };
   await m.react('⬅');
@@ -66,22 +69,23 @@ export const run = async (client, msg, args) => {
   collector.on('collect', async (r, u) => {
     r.users.remove(u);
     if (r.emoji.name === '➡') {
+      const x = m.reactions.find(re => re.emoji.name === '❌');
+      if (x) return;
       page += 1;
       await loadPosts(page);
       m.edit(embed);
     }
     if (r.emoji.name === '⬅') {
+      const x = m.reactions.find(re => re.emoji.name === '❌');
+      if (x) return;
       if (page === 0) return;
       page -= 1;
       await loadPosts(page);
       m.edit(embed);
     }
     if (r.emoji.name === '❌') {
-      m.reactions.forEach((reaction, index) => {
-        if (index > 2 || index === 0) {
-          reaction.users.forEach(user => reaction.users.remove(user));
-        }
-      });
+      const reaction = m.reactions.find(re => re.emoji.name === '❌');
+      if (reaction) reaction.users.forEach(user => reaction.users.remove(user));
       embed.image = null;
       embed.url = null;
       embed.description = null;
@@ -91,12 +95,9 @@ export const run = async (client, msg, args) => {
       numberEmojis.forEach(e => m.react(e));
     }
     if (numberEmojis.includes(r.emoji.name)) {
-      m.reactions.forEach(reaction => reaction.users.forEach(user => reaction.users.remove(user)));
       const index = numberEmojis.indexOf(r.emoji.name);
       await loadPost(index);
       await m.react('❌');
-      await m.react('⬅');
-      await m.react('➡');
     }
   });
 };
