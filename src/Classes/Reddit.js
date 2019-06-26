@@ -46,4 +46,31 @@ export default class Reddit extends EventEmitter {
       after: body.data.after,
     };
   }
+
+  async vote(id, dir) {
+    await this.refreshAccessToken();
+    const { body } = await this.req('https://oauth.reddit.com/api/vote', {
+      method: 'POST',
+      form: {
+        dir,
+        id,
+        api_type: 'json',
+        raw_json: 1,
+      },
+      headers: {
+        'User-Agent': 'RedditCord v1.0 (by u/vilP1l)',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `bearer ${this.accessToken}`,
+      },
+    });
+    return JSON.parse(body);
+  }
+
+  async upvote(id) {
+    await this.vote(id, 1);
+  }
+
+  async downvote(id) {
+    await this.vote(id, -1);
+  }
 }
