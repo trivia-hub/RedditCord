@@ -80,4 +80,21 @@ export default class Reddit extends EventEmitter {
   async downvote(id) {
     await this.vote(id, -1);
   }
+
+  async searchAll(term, allowNsfw, sort, time) {
+    const url = `https://reddit.com/search.json?q=${term}${allowNsfw ? '&include_over_18=on' : ''}&restrict_sr=&sort=${sort || 'relevance'}&t=${time || 'all'}`;
+    const { body } = await this.req(url, { json: true });
+    if (!body.data) {
+      body.data = {
+        children: [],
+        before: null,
+        after: null,
+      };
+    }
+    return {
+      posts: body.data.children.map(c => c.data),
+      before: body.data.before,
+      after: body.data.after,
+    };
+  }
 }
