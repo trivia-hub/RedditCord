@@ -1,4 +1,22 @@
 {
+  "note": "RENAME THIS TO config.json",
   "token": "TOKEN HERE",
-  "owners": ["ARRAY OF OWNER IDS"]
+  "owners": ["ARRAY OF OWNER IDS"],
+  "mongo": {
+    "db": "DATABASE NAME",
+    "user": "USERNAME",
+    "pass": "PASSWORD",
+    "host": "HOST"
+  },
+  "reddit": {
+    "oauthUrl": "THE URL WHERE USERS AUTHENTICATE, USE USEDID FOR USED ID",
+    "auth": "REDDIT APPLICATION AUTH: BASE64 id:secret"
+  },
+  "webserver": {
+    "port": "PORT (NUMBER)",
+    "host": "HOST",
+    "endpoints": {
+      "login": "LOGIN ENDPOINT LOCATION"
+    }
+  }
 }
