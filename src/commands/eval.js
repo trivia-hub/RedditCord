@@ -23,3 +23,4 @@ export const name = 'eval';
 export const description = 'Eval javascript code';
 export const permissionLevel = 2;
 export const args = [{ name: 'toEval', optional: false }];
+export const alias = 'ev';
