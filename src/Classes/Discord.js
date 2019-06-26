@@ -42,7 +42,9 @@ export default class Client extends Discord.Client {
     if (!msg.content.startsWith(this.prefix)) return;
     const args = msg.content.slice(this.prefix.length).trim().split(/ +/g);
     const commandName = args.shift().toLowerCase();
-    const command = this.commands.find(c => c.name === commandName);
+    const command = this.commands.find(c => c.name === commandName)
+    || this.commands.find(c => c.alias === commandName);
+    if (!command) return;
     if (!command.permissionLevel) command.permissionLevel = 0;
     if (command.permissionLevel === 2 && !this.owners.includes(msg.author.id)) {
       const embed = new Discord.MessageEmbed()
