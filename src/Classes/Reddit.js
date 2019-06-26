@@ -36,10 +36,21 @@ export default class Reddit extends EventEmitter {
   }
 
   async getSubredditPosts(subreddit, filter, before, after) {
-    let url = `https://reddit.com/r/${subreddit}/${filter}.json?limit=100`;
+    let url = `https://reddit.com/r/${subreddit}/${filter || 'hot'}.json?limit=100`;
+    if (this.refreshToken) url = `https://oauth.reddit.com/r/${subreddit}/${filter || 'hot'}.json?api_type=json&limit=100&raw_json=1`;
     if (before) url += `&before=${before}`;
     if (after) url += `&after=${after}`;
-    const { body } = await this.req(url, { json: true });
+    const options = {
+      json: true,
+    };
+    if (this.refreshToken) {
+      await this.refreshAccessToken();
+      options.headers = {
+        'User-Agent': 'RedditCord v1.0 (by u/vilP1l)',
+        Authorization: `bearer ${this.accessToken}`,
+      };
+    }
+    const { body } = await this.req(url, options);
     if (!body.data) {
       body.data = {
         children: [],
