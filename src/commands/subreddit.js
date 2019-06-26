@@ -49,22 +49,31 @@ export const run = async (client, msg, args) => {
     const post = posts[index];
     embed.fields = [];
     embed.image = null;
-    embed
-      .setTitle(post.title)
-      .setURL(`https://reddit.com${post.permalink}`)
-      .setDescription(`**Submitted by [u/${post.author}](https://reddit.com/u/${post.author})**`)
-      .setFooter(`${post.score} Upvotes | ${post.num_comments} Comments`);
-    if (post.reddit_video) embed.setImage(post.reddit_video.fallback_url);
-    if (post.post_hint === 'image') embed.setImage(post.url);
-    if (post.selftext) post.selftextPostDesc = `**Submitted by [u/${post.author}](https://reddit.com/u/${post.author})**\n${post.selftext}`;
-    if (post.selftext) embed.setDescription(post.selftextPostDesc.slice(0, 2000));
-    await m.edit(embed);
+    embed.footer = null;
+    if (post.over_18 && !msg.channel.nsfw) {
+      embed
+        .setTitle('This channel is not set to NSFW.');
+      await m.edit(embed);
+    } else {
+      embed
+        .setTitle(post.title)
+        .setURL(`https://reddit.com${post.permalink}`)
+        .setDescription(`**Submitted by [u/${post.author}](https://reddit.com/u/${post.author})**`)
+        .setFooter(`${post.score} Upvotes | ${post.num_comments} Comments`);
+      if (post.reddit_video) embed.setImage(post.reddit_video.fallback_url);
+      if (post.post_hint === 'image') embed.setImage(post.url);
+      if (post.selftext) post.selftextPostDesc = `**Submitted by [u/${post.author}](https://reddit.com/u/${post.author})**\n${post.selftext}`;
+      if (post.selftext) embed.setDescription(post.selftextPostDesc.slice(0, 2000));
+      await m.edit(embed);
+    }
   };
   await m.react('⬅');
   await m.react('➡');
   const filter = (r, u) => u.id === msg.author.id;
   const collector = new ReactionCollector(m, filter);
   const numberEmojis = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣'];
+  const voteEmojis = ['👍', '👎'];
+  let index;
   numberEmojis.forEach(e => m.react(e));
   collector.on('collect', async (r, u) => {
     r.users.remove(u);
@@ -86,18 +95,41 @@ export const run = async (client, msg, args) => {
     if (r.emoji.name === '❌') {
       const reaction = m.reactions.find(re => re.emoji.name === '❌');
       if (reaction) reaction.users.forEach(user => reaction.users.remove(user));
+      voteEmojis.forEach((e) => {
+        const voteReaction = m.reactions.find(re => re.emoji.name === e);
+        if (voteReaction) voteReaction.users.forEach(user => voteReaction.users.remove(user));
+      });
       embed.image = null;
       embed.url = null;
       embed.description = null;
       embed.setTitle(`r/${args[0]} - Hot`);
       await loadPosts(page);
       await m.edit(embed);
-      numberEmojis.forEach(e => m.react(e));
     }
     if (numberEmojis.includes(r.emoji.name)) {
-      const index = numberEmojis.indexOf(r.emoji.name);
+      index = numberEmojis.indexOf(r.emoji.name);
       await loadPost(index);
       await m.react('❌');
+      voteEmojis.forEach(e => m.react(e));
+    }
+    if (r.emoji.name === '👍' || r.emoji.name === '👎') {
+      if (!refreshToken) {
+        const reply = await msg.reply('You aren\'t logged in, please run +login.');
+        setTimeout(() => reply.delete(), 3000);
+        return;
+      }
+      const posts = [...res.posts];
+      posts.splice(0, page * 5 + 1);
+      const post = posts[index];
+      if (r.emoji.name === '👍') {
+        await reddit.upvote(post.name);
+        const reply = await msg.reply('Successfully upvoted post!');
+        setTimeout(() => reply.delete(), 3000);
+      } else {
+        await reddit.downvote(post.name);
+        const reply = await msg.reply('Successfully downvoted post!');
+        setTimeout(() => reply.delete(), 3000);
+      }
     }
   });
 };
