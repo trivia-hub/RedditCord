@@ -1,5 +1,7 @@
+/* eslint-disable camelcase */
 import express from 'express';
 import { EventEmitter } from 'events';
+import Reddit from './Reddit';
 
 export default class WebServer extends EventEmitter {
   constructor(port, mongo) {
@@ -24,6 +26,11 @@ export default class WebServer extends EventEmitter {
       return;
     }
     await this.db.setOAuth(state, code);
+    const user = await this.db.getUser(state);
+    const reddit = new Reddit(null, code);
+    const body = await reddit.getAccessToken();
+    user.refreshToken = body.refresh_token;
+    await this.db.updateUser(state, user);
     res.send('Login success!');
     this.emit('login', { id: state, oauth: code });
   }
