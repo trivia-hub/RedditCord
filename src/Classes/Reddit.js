@@ -40,6 +40,13 @@ export default class Reddit extends EventEmitter {
     if (before) url += `&before=${before}`;
     if (after) url += `&after=${after}`;
     const { body } = await this.req(url, { json: true });
+    if (!body.data) {
+      body.data = {
+        children: [],
+        before: null,
+        after: null,
+      };
+    }
     return {
       posts: body.data.children.map(c => c.data),
       before: body.data.before,
