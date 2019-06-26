@@ -22,7 +22,7 @@ export const run = async (client, msg, args) => {
     return;
   }
   const embed = new MessageEmbed()
-    .setTitle(`Search results for ${args.join(' ')} - Hot`);
+    .setTitle(`Search results for ${args.join(' ')}`);
   const loadPosts = async (page) => {
     embed.setFooter(`Page ${page + 1}`);
     embed.fields = [];
