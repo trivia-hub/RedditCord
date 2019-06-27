@@ -25,8 +25,10 @@ Mongo.on('connected', async () => {
   client.db = Mongo;
   client.webserver = api;
   const users = await Mongo.db.collection('users').find({}).toArray();
-  users.forEach((u) => {
-    if (u.refreshToken) {
+  users.forEach(async (u) => {
+    await Mongo.initUser(u.id);
+    const user = await Mongo.getUser(u.id);
+    if (user.refreshToken) {
       const reddit = new Reddit(u.refreshToken);
       reddit.on('message', (msgs) => {
         const message = msgs[0];
@@ -38,14 +40,14 @@ Mongo.on('connected', async () => {
           .addField('Content', message.body)
           .setTimestamp(Date.now());
         if (message.context) embed.setURL(`https://reddit.com${message.context}`);
-        const user = client.users.get(u.id);
-        if (user) user.send(embed);
+        const author = client.users.get(u.id);
+        if (author) author.send(embed);
       });
       reddit.on('invalidToken', async () => {
-        const user = u;
-        user.refreshToken = null;
-        user.oauth = null;
-        await Mongo.updateUser(u.id, user);
+        const newUser = user;
+        newUser.refreshToken = null;
+        newUser.oauth = null;
+        await Mongo.updateUser(u.id, newUser);
       });
     }
   });
