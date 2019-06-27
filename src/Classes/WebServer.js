@@ -34,4 +34,22 @@ export default class WebServer extends EventEmitter {
     res.send('Login success!');
     this.emit('login', { id: state, oauth: code });
   }
+
+  async logout(req, res) {
+    const { id } = req.query;
+    if (!id) {
+      res.send('No id was provided.');
+      return;
+    }
+    await this.db.initUser(id);
+    const user = await this.db.getUser(id);
+    if (!user.refreshToken) {
+      res.send('You aren\'t logged in.');
+      return;
+    }
+    user.refreshToken = null;
+    user.oauth = null;
+    await this.db.updateUser(id, user);
+    res.send('Logout success!');
+  }
 }
