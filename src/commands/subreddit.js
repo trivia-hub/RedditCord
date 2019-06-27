@@ -165,7 +165,7 @@ export const run = async (client, msg, args) => {
       const postRes = await reddit.postComment(post.name, message.content);
       await message.delete();
       await prompt.delete();
-      if (postRes.json.errors.length) {
+      if (!postRes.json || postRes.json.errors.length) {
         const reply = await msg.reply('Error submitting comment.');
         setTimeout(() => reply.delete(), 3000);
         return;
