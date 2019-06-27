@@ -153,4 +153,22 @@ export default class Reddit extends EventEmitter {
     });
     return body;
   }
+
+  async postComment(id, comment) {
+    await this.refreshAccessToken();
+    const { body } = await this.req('https://oauth.reddit.com/api/comment', {
+      method: 'POST',
+      form: {
+        text: comment,
+        thing_id: id,
+        api_type: 'json',
+      },
+      headers: {
+        'User-Agent': 'RedditCord v1.0 (by u/vilP1l)',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `bearer ${this.accessToken}`,
+      },
+    });
+    return JSON.parse(body);
+  }
 }
