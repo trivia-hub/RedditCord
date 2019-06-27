@@ -36,8 +36,9 @@ export default class Reddit extends EventEmitter {
   }
 
   async getSubredditPosts(subreddit, filter, before, after) {
-    let url = `https://reddit.com/r/${subreddit}/${filter || 'hot'}.json?limit=100`;
-    if (this.refreshToken) url = `https://oauth.reddit.com/r/${subreddit}/${filter || 'hot'}.json?api_type=json&limit=100&raw_json=1`;
+    let url = `https://reddit.com/r/${subreddit}/${filter || 'best'}.json?limit=100`;
+    if (this.refreshToken) url = `https://oauth.reddit.com/r/${subreddit}/${filter || 'best'}.json?api_type=json&limit=100&raw_json=1`;
+    if (subreddit === '') url = url.replace('r//', '');
     if (before) url += `&before=${before}`;
     if (after) url += `&after=${after}`;
     const options = {
