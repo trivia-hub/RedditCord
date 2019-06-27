@@ -40,7 +40,12 @@ export default class Reddit extends EventEmitter {
         Authorization: reddit.auth,
       },
     });
-    this.accessToken = JSON.parse(body).access_token;
+    const json = JSON.parse(body);
+    if (json.error) {
+      this.emit('invalidToken', this.refreshToken);
+      return null;
+    }
+    this.accessToken = json.access_token;
     return this.accessToken;
   }
 
@@ -91,6 +96,7 @@ export default class Reddit extends EventEmitter {
         Authorization: `bearer ${this.accessToken}`,
       },
     });
+    console.log(body);
     return JSON.parse(body);
   }
 

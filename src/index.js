@@ -41,6 +41,12 @@ Mongo.on('connected', async () => {
         const user = client.users.get(u.id);
         if (user) user.send(embed);
       });
+      reddit.on('invalidToken', async () => {
+        const user = u;
+        user.refreshToken = null;
+        user.oauth = null;
+        await Mongo.updateUser(u.id, user);
+      });
     }
   });
 });
