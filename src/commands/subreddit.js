@@ -101,6 +101,10 @@ export const run = async (client, msg, args) => {
     if (r.emoji.name === '❌') {
       const reaction = m.reactions.find(re => re.emoji.name === '❌');
       if (reaction) reaction.users.forEach(user => reaction.users.remove(user));
+      const commentReaction = m.reactions.find(re => re.emoji.name === '📝');
+      if (commentReaction) {
+        commentReaction.users.forEach(user => commentReaction.users.remove(user));
+      }
       voteEmojis.forEach((e) => {
         const voteReaction = m.reactions.find(re => re.emoji.name === e);
         if (voteReaction) voteReaction.users.forEach(user => voteReaction.users.remove(user));
