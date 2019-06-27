@@ -117,6 +117,7 @@ export const run = async (client, msg, args) => {
       await loadPost(index);
       await m.react('❌');
       voteEmojis.forEach(e => m.react(e));
+      await m.react('📝');
     }
     if (r.emoji.name === '👍' || r.emoji.name === '👎') {
       if (!refreshToken) {
@@ -136,6 +137,37 @@ export const run = async (client, msg, args) => {
         const reply = await msg.reply('Successfully downvoted post!');
         setTimeout(() => reply.delete(), 3000);
       }
+    }
+    if (r.emoji.name === '📝') {
+      if (!refreshToken) {
+        const reply = await msg.reply('You aren\'t logged in, please run +login.');
+        setTimeout(() => reply.delete(), 3000);
+        return;
+      }
+      const posts = [...res.posts];
+      posts.splice(0, page * 5 + 1);
+      const post = posts[index];
+      const prompt = await msg.reply('What would you like to comment? (to cancel type cancel)');
+      const messageFilter = message => message.author.id === msg.author.id;
+      const messages = await msg.channel.awaitMessages(messageFilter, { max: 1 });
+      const message = messages.first();
+      if (message.content === 'cancel') {
+        await message.delete();
+        await prompt.delete();
+        const reply = await msg.reply('Canceled');
+        setTimeout(() => reply.delete(), 3000);
+        return;
+      }
+      const postRes = await reddit.postComment(post.name, message.content);
+      await message.delete();
+      await prompt.delete();
+      if (postRes.json.errors.length) {
+        const reply = await msg.reply('Error submitting comment.');
+        setTimeout(() => reply.delete(), 3000);
+        return;
+      }
+      const reply = await msg.reply('Successfully submitted comment!');
+      setTimeout(() => reply.delete(), 3000);
     }
   });
 };

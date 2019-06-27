@@ -96,7 +96,6 @@ export default class Reddit extends EventEmitter {
         Authorization: `bearer ${this.accessToken}`,
       },
     });
-    console.log(body);
     return JSON.parse(body);
   }
 
