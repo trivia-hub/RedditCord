@@ -25,4 +25,5 @@ Mongo.on('connected', () => {
 });
 
 client.on('commandLoaded', c => console.log(`${chalk.blue('INFO')} Loaded Command ${chalk.bold(`${c}`)}!`));
+client.on('commandReloaded', c => console.log(`${chalk.blue('INFO')} Reloaded Command ${chalk.bold(`${c}`)}!`));
 client.on('ready', () => console.log(`${chalk.blue('INFO')} Logged in as ${chalk.bold(client.user.tag)}!`));
