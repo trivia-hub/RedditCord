@@ -17,11 +17,13 @@ export const run = (client, msg, args) => {
     } else {
       const embed = new MessageEmbed()
         .addField(`**Command Name:** ${command.name}`, '[]()')
-        .addField(`**Command Description:** ${command.description}`, '[]()');
+        .addField(`**Command Description:** ${command.description}`, '[]()')
+        .addField(`**Command Alias:** ${command.alias}`, '[]()');
       if (command.args) {
         if (command.args.find(a => a.optional)) {
           embed.addField('**Optional Argument(s):**', command.args.filter(a => a.optional).map(a => a.name));
-        } else if (command.args.find(a => !a.optional)) {
+        }
+        if (command.args.find(a => !a.optional)) {
           embed.addField('**Required Argument(s):**', command.args.filter(a => !a.optional).map(a => a.name));
         }
       }

@@ -142,5 +142,5 @@ export const run = async (client, msg, args) => {
 
 export const name = 'subreddit';
 export const description = 'Get posts from a subreddit';
-export const args = [{ name: 'subreddit', optional: false }];
+export const args = [{ name: 'subreddit', optional: false }, { name: 'filter', optional: true }];
 export const alias = 's';
