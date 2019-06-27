@@ -24,6 +24,7 @@
     "express": "^4.17.1",
     "mongodb": "^3.2.7",
     "number-to-words": "^1.2.4",
+    "querystring": "^0.2.0",
     "request": "^2.88.0"
   },
   "devDependencies": {
