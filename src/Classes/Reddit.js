@@ -10,6 +10,15 @@ export default class Reddit extends EventEmitter {
     this.oauth = oauth;
     this.accessToken = null;
     this.req = promisify(request);
+    if (this.refreshToken) {
+      this.privateMessageGetter = setInterval(async () => {
+        const res = await this.getUnreadMessages();
+        if (res.messages.length) {
+          res.messages.forEach(m => this.readMessage(m.name));
+          this.emit('message', res.messages);
+        }
+      }, 30000);
+    }
   }
 
   async getAccessToken() {
@@ -108,5 +117,34 @@ export default class Reddit extends EventEmitter {
       before: body.data.before,
       after: body.data.after,
     };
+  }
+
+  async getUnreadMessages() {
+    await this.refreshAccessToken();
+    const { body } = await this.req('https://oauth.reddit.com/message/unread?limit=100&mark=true', {
+      headers: {
+        'User-Agent': 'RedditCord v1.0 (by u/vilP1l)',
+        Authorization: `bearer ${this.accessToken}`,
+      },
+      json: true,
+    });
+    return {
+      messages: body.data.children.map(c => c.data),
+      after: body.data.after,
+      before: body.data.before,
+    };
+  }
+
+  async readMessage(id) {
+    await this.refreshAccessToken();
+    const { body } = await this.req(`https://oauth.reddit.com/api/read_message?api_type=json&id=${id}&raw_json=1`, {
+      method: 'POST',
+      headers: {
+        'User-Agent': 'RedditCord v1.0 (by u/vilP1l)',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `bearer ${this.accessToken}`,
+      },
+    });
+    return body;
   }
 }
