@@ -60,7 +60,7 @@ export const run = async (client, msg, args) => {
         .setURL(`https://reddit.com${post.permalink}`)
         .setDescription(`**Submitted by [u/${post.author}](https://reddit.com/u/${post.author})**`)
         .setFooter(`${post.score} Upvotes | ${post.num_comments} Comments`);
-      if (post.reddit_video) embed.setImage(post.reddit_video.fallback_url);
+      if (post.media && post.media.reddit_video) embed.setImage(`${post.media.reddit_video.fallback_url}.mp4`);
       if (post.post_hint === 'image') embed.setImage(post.url);
       if (post.selftext) post.selftextPostDesc = `**Submitted by [u/${post.author}](https://reddit.com/u/${post.author})**\n${post.selftext}`;
       if (post.selftext) embed.setDescription(post.selftextPostDesc.slice(0, 2000));
