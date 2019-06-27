@@ -6,12 +6,12 @@ Discord Reddit Client made for Discord Hack Week
 
 ### vilP1l#0001
 
-- Development
+- Lead Developer
 - Testing
 
 ### its a-me markio#9733
 
-- Development
+- Minor Additions
 - Testing
 
 ## Setup
