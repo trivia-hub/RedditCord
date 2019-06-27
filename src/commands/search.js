@@ -58,11 +58,11 @@ export const run = async (client, msg, args) => {
       embed
         .setTitle(post.title.slice(0, 254))
         .setURL(`https://reddit.com${post.permalink}`)
-        .setDescription(`**Submitted by [u/${post.author}](https://reddit.com/u/${post.author}) to [r/${post.subreddit}](https://reddit.com/r/${post.subreddit})**`)
+        .setDescription(`**Submitted by [u/${post.author}](https://reddit.com/u/${post.author}) on [r/${post.subreddit}](https://reddit.com/r/${post.subreddit})**`)
         .setFooter(`${post.score} Upvotes | ${post.num_comments} Comments`);
       if (post.reddit_video) embed.setImage(`${post.reddit_video.fallback_url}.mp4`);
       if (post.post_hint === 'image') embed.setImage(post.url);
-      if (post.selftext) post.selftextPostDesc = `**Submitted by [u/${post.author}](https://reddit.com/u/${post.author}) to [r/${post.subreddit}](https://reddit.com/r/${post.subreddit})**\n${post.selftext}`;
+      if (post.selftext) post.selftextPostDesc = `**Submitted by [u/${post.author}](https://reddit.com/u/${post.author}) on [r/${post.subreddit}](https://reddit.com/r/${post.subreddit})**\n${post.selftext}`;
       if (post.selftext) embed.setDescription(post.selftextPostDesc.slice(0, 2000));
       await m.edit(embed);
     }
