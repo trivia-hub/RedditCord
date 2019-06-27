@@ -3,9 +3,15 @@ import { toWords } from 'number-to-words';
 import Reddit from '../Classes/Reddit';
 
 export const run = async (client, msg, args) => {
-  if (!args[0]) {
+  if (!args[0] && args[0] !== '') {
     const embed = new MessageEmbed()
       .setTitle('No subreddit name was provided.');
+    msg.channel.send(embed);
+    return;
+  }
+  if (args[1] && args[1] !== 'top' && args[1] !== 'hot' && args[1] !== 'best' && args[1] !== 'new') {
+    const embed = new MessageEmbed()
+      .setTitle('Invalid filter provided.');
     msg.channel.send(embed);
     return;
   }
@@ -13,7 +19,7 @@ export const run = async (client, msg, args) => {
   const { refreshToken } = await client.db.getUser(msg.author.id);
   const reddit = new Reddit(refreshToken);
   msg.channel.startTyping();
-  const res = await reddit.getSubredditPosts(args[0], 'hot');
+  const res = await reddit.getSubredditPosts(args[0], args[1] || 'best');
   msg.channel.stopTyping();
   if (!res.posts.length) {
     const embed = new MessageEmbed()
@@ -22,14 +28,14 @@ export const run = async (client, msg, args) => {
     return;
   }
   const embed = new MessageEmbed()
-    .setTitle(`r/${args[0]} - Hot`);
+    .setTitle(`r/${args[0]} - ${args[1] || 'best'}`);
   const loadPosts = async (page) => {
     embed.setFooter(`Page ${page + 1}`);
     embed.fields = [];
     const posts = [...res.posts];
     posts.splice(0, page * 5 + 1);
     if (!posts.length) {
-      const newPosts = await reddit.getSubredditPosts(args[0], 'hot', null, res.after);
+      const newPosts = await reddit.getSubredditPosts(args[0], args[1] || 'best', null, res.after);
       newPosts.forEach(p => posts.push(p));
       res.after = newPosts.after;
       return loadPosts(page);
@@ -102,7 +108,7 @@ export const run = async (client, msg, args) => {
       embed.image = null;
       embed.url = null;
       embed.description = null;
-      embed.setTitle(`r/${args[0]} - Hot`);
+      embed.setTitle(`r/${args[0]} - ${args[1] || 'best'}`);
       await loadPosts(page);
       await m.edit(embed);
     }
