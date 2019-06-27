@@ -75,10 +75,13 @@ export const run = async (client, msg, args) => {
   };
   await m.react('⬅');
   await m.react('➡');
-  const filter = (r, u) => u.id === msg.author.id;
+  const voteEmojis = ['👍', '👎'];
+  const filter = (r, u) => {
+    if (voteEmojis.includes(r.emoji.name) && !u.bot) return true;
+    return u.id === msg.author.id;
+  };
   const collector = new ReactionCollector(m, filter);
   const numberEmojis = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣'];
-  const voteEmojis = ['👍', '👎'];
   let index;
   numberEmojis.forEach(e => m.react(e));
   collector.on('collect', async (r, u) => {
@@ -124,8 +127,13 @@ export const run = async (client, msg, args) => {
       await m.react('📝');
     }
     if (r.emoji.name === '👍' || r.emoji.name === '👎') {
+      await client.db.initUser(u.id);
+      // eslint-disable-next-line no-shadow
+      const { refreshToken } = await client.db.getUser(u.id);
+      // eslint-disable-next-line no-shadow
+      const reddit = new Reddit(refreshToken);
       if (!refreshToken) {
-        const reply = await msg.reply('You aren\'t logged in, please run +login.');
+        const reply = await msg.channel.send(`${u}, You aren't logged in, please run +login.`);
         setTimeout(() => reply.delete(), 3000);
         return;
       }
@@ -134,11 +142,11 @@ export const run = async (client, msg, args) => {
       const post = posts[index];
       if (r.emoji.name === '👍') {
         await reddit.upvote(post.name);
-        const reply = await msg.reply('Successfully upvoted post!');
+        const reply = await msg.channel.send(`${u}, Successfully upvoted post!`);
         setTimeout(() => reply.delete(), 3000);
       } else {
         await reddit.downvote(post.name);
-        const reply = await msg.reply('Successfully downvoted post!');
+        const reply = await msg.channel.send(`${u}, Successfully downvoted post!`);
         setTimeout(() => reply.delete(), 3000);
       }
     }
