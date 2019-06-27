@@ -42,7 +42,7 @@ export const run = async (client, msg, args) => {
     }
     posts.forEach((p, i) => {
       if (i > 4) return;
-      embed.addField(`:${toWords(i + 1)}: - ${p.title}`, '[]()');
+      embed.addField(`:${toWords(i + 1)}: - ${p.title}`.slice(0, 250), '[]()');
     });
     return posts;
   };
@@ -62,7 +62,7 @@ export const run = async (client, msg, args) => {
       await m.edit(embed);
     } else {
       embed
-        .setTitle(post.title)
+        .setTitle(post.title.slice(0, 250))
         .setURL(`https://reddit.com${post.permalink}`)
         .setDescription(`**Submitted by [u/${post.author}](https://reddit.com/u/${post.author})**`)
         .setFooter(`${post.score} Upvotes | ${post.num_comments} Comments`);
