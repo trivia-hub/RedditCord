@@ -14,6 +14,7 @@ export default class Client extends Discord.Client {
     this.login(options.token);
     this.on('message', this.handleMessage.bind(this));
     this.on('ready', this.handleConnected.bind(this));
+    this.cooldown = new Map();
   }
 
   loadCommands() {
@@ -46,13 +47,25 @@ export default class Client extends Discord.Client {
     || this.commands.find(c => c.alias === commandName);
     if (!command) return;
     if (!command.permissionLevel) command.permissionLevel = 0;
+    if (!command.cooldown) command.cooldown = 0;
     if (command.permissionLevel === 2 && !this.owners.includes(msg.author.id)) {
       const embed = new Discord.MessageEmbed()
         .setTitle('You don\'t have permission to use this command.');
       msg.channel.send(embed);
       return;
     }
-    if (command) command.run(this, msg, args);
+    if (command) {
+      if (command.cooldown && this.cooldown.has(msg.author.id)
+      && this.cooldown.get(msg.author.id).command === commandName) {
+        const embed = new Discord.MessageEmbed()
+          .setTitle('This command is on cooldown.');
+        msg.channel.send(embed);
+      } else {
+        this.cooldown.set(msg.author.id, { user: msg.author.id, command: commandName });
+        this.setTimeout(() => this.cooldown.delete(msg.author.id), command.cooldown);
+        command.run(this, msg, args);
+      }
+    }
   }
 
   handleConnected() {
