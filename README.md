@@ -8,6 +8,7 @@ Discord Reddit Client made for Discord Hack Week
 
 ## Features
 
+
 ### Subreddit Browsing
 
 <img src="assets/subreddit.jpg" width="400">
@@ -19,6 +20,10 @@ Discord Reddit Client made for Discord Hack Week
 ### Voting
 
 <img src="assets/voting.gif" width="400">
+
+### Commenting 
+
+<img src="assets/commenting.gif" width="400">
 
 ## Team
 
