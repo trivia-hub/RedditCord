@@ -133,6 +133,13 @@ export default class Reddit extends EventEmitter {
       },
       json: true,
     });
+    if (!body.data) {
+      body.data = {
+        children: [],
+        after: null,
+        before: null,
+      };
+    }
     return {
       messages: body.data.children.map(c => c.data),
       after: body.data.after,
