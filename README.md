@@ -25,6 +25,14 @@ Discord Reddit Client made for Discord Hack Week
 
 <img src="assets/commenting.gif" width="400">
 
+### Posting
+
+<img src="assets/posting.gif" width="400">
+
+### Notifications
+
+<img src="assets/notifications.jpg" width="400">
+
 ## Team
 
 ### vilP1l#0001
