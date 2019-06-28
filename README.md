@@ -1,5 +1,7 @@
 # RedditCord
 
+<img src="assets/banner.png" width="400">
+
 Discord Reddit Client made for Discord Hack Week  
 [**Testing Server**](https://discord.gg/H5kCpg4)  
 [**Invite Link**](https://discordapp.com/api/oauth2/authorize?client_id=592798439751024650&permissions=1073752128&scope=bot)
