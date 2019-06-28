@@ -33,7 +33,7 @@ export const run = async (client, msg, args) => {
     embed.setFooter(`Page ${page + 1}`);
     embed.fields = [];
     const posts = [...res.posts];
-    posts.splice(0, page * 5 + 1);
+    posts.splice(0, page * 5);
     if (!posts.length) {
       const newPosts = await reddit.getSubredditPosts(args[0], args[1] || 'best', null, res.after);
       newPosts.forEach(p => posts.push(p));
@@ -51,7 +51,7 @@ export const run = async (client, msg, args) => {
   const m = await msg.channel.send(embed);
   const loadPost = async (index) => {
     const posts = [...res.posts];
-    posts.splice(0, page * 5 + 1);
+    posts.splice(0, page * 5);
     const post = posts[index];
     embed.fields = [];
     embed.image = null;
@@ -138,7 +138,7 @@ export const run = async (client, msg, args) => {
         return;
       }
       const posts = [...res.posts];
-      posts.splice(0, page * 5 + 1);
+      posts.splice(0, page * 5);
       const post = posts[index];
       if (r.emoji.name === '👍') {
         await reddit.upvote(post.name);
@@ -157,7 +157,7 @@ export const run = async (client, msg, args) => {
         return;
       }
       const posts = [...res.posts];
-      posts.splice(0, page * 5 + 1);
+      posts.splice(0, page * 5);
       const post = posts[index];
       const prompt = await msg.reply('What would you like to comment? (to cancel type cancel)');
       const messageFilter = message => message.author.id === msg.author.id;
