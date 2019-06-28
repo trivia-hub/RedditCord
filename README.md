@@ -13,6 +13,10 @@ Discord Reddit Client made for Discord Hack Week
 - Lead Developer
 - Testing
 
+### SpotiKona#0001
+
+- Testing
+
 ### its a-me markio#9733
 
 - Minor Additions
