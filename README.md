@@ -54,7 +54,7 @@ Discord Reddit client created for Discord Hack Week
 - Minor additions
 - Testing
 
-## Usage
+## Setup
 
 Step #0: Install [Node.js](https://nodejs.org/).
 
