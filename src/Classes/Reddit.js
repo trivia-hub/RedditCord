@@ -24,7 +24,7 @@ export default class Reddit extends EventEmitter {
   async getAccessToken() {
     const { body } = await this.req('https://www.reddit.com/api/v1/access_token', {
       method: 'POST',
-      body: `grant_type=authorization_code&code=${this.oauth}&redirect_uri=http://${webserver.host}:${webserver.port}/${webserver.endpoints.login}`,
+      body: `grant_type=authorization_code&code=${this.oauth}&redirect_uri=${webserver.protocol}://${webserver.host}:${webserver.port}/${webserver.endpoints.login}`,
       headers: {
         Authorization: reddit.auth,
       },
