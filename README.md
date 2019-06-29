@@ -2,8 +2,8 @@
 
 <img src="assets/banner.png" width="400">
 
-Discord Reddit Client made for Discord Hack Week  
-[**Testing Server**](https://discord.gg/H5kCpg4)  
+Discord Reddit client created for Discord Hack Week
+[**Discord Server**](https://discord.gg/H5kCpg4)
 [**Invite Link**](https://discordapp.com/api/oauth2/authorize?client_id=592798439751024650&permissions=1073752128&scope=bot)
 
 ## Features
@@ -21,7 +21,7 @@ Discord Reddit Client made for Discord Hack Week
 
 <img src="assets/voting.gif" width="400">
 
-### Commenting 
+### Commenting
 
 <img src="assets/commenting.gif" width="400">
 
@@ -37,7 +37,7 @@ Discord Reddit Client made for Discord Hack Week
 
 ### vilP1l#0001
 
-- Lead Developer
+- Lead developer
 - Testing
 
 ### SpotiKona#0001
@@ -47,31 +47,33 @@ Discord Reddit Client made for Discord Hack Week
 
 ### its a-me markio#9733
 
-- Minor Additions
+- Minor additions
 - Testing
 
-## Setup
+## Usage
 
-You will need nodejs and npm for this bot.
+Step #0: Install [Node.js](https://nodejs.org/).
 
-Run `npm install` to install the requried dependencies.
+Step #1: Open a shell & navigate to the directory where you have cloned the code.
 
-Run `npm run build` or `yarn build`  
-This will compile the source code with babel and create a folder called lib with the compiled code.
+Step #2: To install the required dependencies, run `npm install`.
 
-Rename config-example.json to config.json and remove the note.
+Step #3: To compile to code, run `npm run build`.
+You should notice that a new folder has appeared. This folder contains the compiled code.
 
-Create a discord application & bot [here](https://discordapp.com/developers/applications) and put the bot token in your config file.
+Step #4: Create a new file called `config.json`. Use `config-example.json` as a guide.
 
-Put your discord id in the array of owner ids so you can use commands such as eval and reload.
+Step #5: Create a Discord [bot](https://discordapp.com/developers/applications). From there, locate the bot token & add it to `config.json`.
 
-You will need to setup a MongoDB database for this bot to work, Mongo stores reddit authentication tokens which are required for most api actions.  
-Once you have setup Mongo, put the database name you want to use, username, password, and host (localhost if you installed Mongo locally) in the mongo section of your config file.
+Step #6: Locate your Discord ID & add it to the array of owner ID's. This will unlock privileged commands, such as `eval` & `reload`.
 
-Next, create a reddit application [here](https://www.reddit.com/prefs/apps) with the type of "web app". Create a reddit oauth url with [this guide](https://github.com/reddit-archive/reddit/wiki/oauth2) and with these scopes: identity,submit,subscribe,vote,mysubreddits,read,edit,privatemessages, for the state use USERID. For the auth token go to [this site](https://www.base64encode.org/) and encode `YOUR_APP_ID:YOUR_APP_SECRET`, paste the encoded string into your config file.
+Step #6: You will need to create a Mongo [database](https://www.mongodb.com/download-center/community) to store Reddit authentication tokens.
+The information used to configure Mongo can then be added to `config.json`. 
 
-Finally setup the webserver, set the port you want to use and what host it will you (localhost if hosting locally). For the login endpoint set it to `api/login`.
+Step #7: Create a Reddit [application](https://www.reddit.com/prefs/apps). Set the type as: "web app." Create a Reddit OAuth URL using this [guide](https://github.com/reddit-archive/reddit/wiki/oauth2). The following scopes are required: identity, submit, subscribe, vote, mysubreddits, read, edit, & privatemessages. For the state, use "USERID." For the authorization token, head to this [website](https://www.base64encode.org/). Encode `YOUR_APP_ID:YOUR_APP_SECRET`, then paste the encoded string into `config.json`.
 
-You can now start the bot with `node lib/index.js`!
+Step #8: Set up the web server. Set the port/host. The default endpoints & more can be found in `WebServer.js` located @ `src/Classes`.
 
-If you need any help with these instructions, feel free to message me on Discord: vilP1l#0001, or create a GitHub issue.
+Step #9: To start the bot, run `node lib/index.js`!
+
+If you need any help following these instructions, feel free to message either vilP1l#0001 or SpotiKona#0001 on Discord. Please refrain from creating a GitHub issue unless there is an actual issue that needs to be addressed.
