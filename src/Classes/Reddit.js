@@ -177,4 +177,39 @@ export default class Reddit extends EventEmitter {
     });
     return JSON.parse(body);
   }
+
+  async post(title, data, sr, kind) {
+    await this.refreshAccessToken();
+    const { body } = await this.req('https://oauth.reddit.com/api/submit', {
+      method: 'POST',
+      headers: {
+        'User-Agent': 'RedditCord v1.0 (by u/vilP1l)',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `bearer ${this.accessToken}`,
+      },
+      form: {
+        title,
+        [kind === 'self' ? 'text' : 'url']: data,
+        sr,
+        kind,
+      },
+    });
+
+    return JSON.parse(body);
+  }
+
+  async sendMessage(subject, text, to) {
+    await this.refreshAccessToken();
+    const { body } = await this.req('https://oauth.reddit.com/api/compose', {
+      method: 'POST',
+      headers: {
+        'User-Agent': 'RedditCord v1.0 (by u/vilP1l)',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `bearer ${this.accessToken}`,
+      },
+      form: { subject, text, to },
+    });
+
+    return JSON.parse(body);
+  }
 }
