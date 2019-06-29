@@ -40,6 +40,10 @@ Mongo.on('connected', async () => {
           .addField('Content', message.body)
           .setTimestamp(Date.now());
         if (message.context) embed.setURL(`https://reddit.com${message.context}`);
+        if (message.subject && !message.link_title) {
+          embed.fields[1].value = 'private message';
+          embed.fields[2].value = message.subject;
+        }
         const author = client.users.get(u.id);
         if (author) author.send(embed);
       });
