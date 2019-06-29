@@ -142,11 +142,11 @@ export const run = async (client, msg, args) => {
       const post = posts[index];
       if (r.emoji.name === '👍') {
         await reddit.upvote(post.name);
-        const reply = await msg.channel.send(`${u}, Successfully upvoted post!`);
+        const reply = await msg.channel.send(`${u}, Upvoted post :white_check_mark:`);
         setTimeout(() => reply.delete(), 3000);
       } else {
         await reddit.downvote(post.name);
-        const reply = await msg.channel.send(`${u}, Successfully downvoted post!`);
+        const reply = await msg.channel.send(`${u}, Downvoted post :white_check_mark:`);
         setTimeout(() => reply.delete(), 3000);
       }
     }
@@ -174,11 +174,11 @@ export const run = async (client, msg, args) => {
       await message.delete();
       await prompt.delete();
       if (!postRes.json || postRes.json.errors.length) {
-        const reply = await msg.reply('Error submitting comment.');
+        const reply = await msg.reply('Couldn\'t submit comment :no_entry_sign:');
         setTimeout(() => reply.delete(), 3000);
         return;
       }
-      const reply = await msg.reply('Successfully submitted comment!');
+      const reply = await msg.reply('Submitted comment :white_check_mark:');
       setTimeout(() => reply.delete(), 3000);
     }
   });
