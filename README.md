@@ -2,8 +2,8 @@
 
 <img src="assets/banner.png" width="400">
 
-Discord Reddit client created for Discord Hack Week
-[**Discord Server**](https://discord.gg/H5kCpg4)
+Discord Reddit client created for Discord Hack Week  
+[**Discord Server**](https://discord.gg/H5kCpg4)  
 [**Invite Link**](https://discordapp.com/api/oauth2/authorize?client_id=592798439751024650&permissions=1073752128&scope=bot)
 
 ## Features
