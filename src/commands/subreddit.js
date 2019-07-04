@@ -29,6 +29,7 @@ export const run = async (client, msg, args) => {
   }
   const embed = new MessageEmbed()
     .setTitle(`r/${args[0]} - ${args[1] || 'best'}`);
+  if (args[0] === '') embed.setTitle(`Homepage - ${args[1] || 'best'}`);
   const loadPosts = async (page) => {
     embed.setFooter(`Page ${page + 1}`);
     embed.fields = [];
@@ -116,6 +117,7 @@ export const run = async (client, msg, args) => {
       embed.url = null;
       embed.description = null;
       embed.setTitle(`r/${args[0]} - ${args[1] || 'best'}`);
+      if (args[0] === '') embed.setTitle(`Homepage - ${args[1] || 'best'}`);
       await loadPosts(page);
       await m.edit(embed);
     }
