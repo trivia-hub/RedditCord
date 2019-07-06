@@ -77,9 +77,17 @@ export const run = async (client, msg, args) => {
   const collector = new ReactionCollector(m, filter);
   const numberEmojis = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣'];
   let index;
+  const cooldown = new Set();
   numberEmojis.forEach(e => m.react(e));
   collector.on('collect', async (r, u) => {
     r.users.remove(u);
+    if (cooldown.has(msg.author.id)) {
+      const reply = await msg.reply('Please wait before reacting again.');
+      setTimeout(() => reply.delete(), 3000);
+      return;
+    }
+    cooldown.add(msg.author.id);
+    setTimeout(() => cooldown.delete(msg.author.id), 500);
     if (r.emoji.name === '➡') {
       const x = m.reactions.find(re => re.emoji.name === '❌');
       if (x) return;
