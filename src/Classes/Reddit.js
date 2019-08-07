@@ -55,6 +55,7 @@ export default class Reddit extends EventEmitter {
     if (subreddit === '') url = url.replace('r//', '');
     if (before) url += `&before=${before}`;
     if (after) url += `&after=${after}`;
+    if (filter === 'top') url += '&t=all';
     const options = {
       json: true,
     };
