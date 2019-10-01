@@ -11,7 +11,6 @@ export default class WebServer extends EventEmitter {
     this.app = express();
     this.app.listen(port, () => this.emit('ready', port));
     this.app.get('/api/login', this.login.bind(this));
-    // this.app.get('/api/logout', this.logout.bind(this));
     this.app.get('*', req => this.emit('GET', req.path));
   }
 
@@ -33,23 +32,5 @@ export default class WebServer extends EventEmitter {
     await this.db.updateUser(state, user);
     res.send('Login success!');
     this.emit('login', { id: state, oauth: code });
-  }
-
-  async logout(req, res) {
-    const { id } = req.query;
-    if (!id) {
-      res.send('No id was provided.');
-      return;
-    }
-    await this.db.initUser(id);
-    const user = await this.db.getUser(id);
-    if (!user.refreshToken) {
-      res.send('You aren\'t logged in.');
-      return;
-    }
-    user.refreshToken = null;
-    user.oauth = null;
-    await this.db.updateUser(id, user);
-    res.send('Logout success!');
   }
 }
