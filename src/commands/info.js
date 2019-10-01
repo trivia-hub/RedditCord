@@ -5,6 +5,7 @@ export const run = (client, msg) => {
     .setTitle('Info')
     .setDescription('RedditCord is an open source Discord Reddit Client created by vilP1l#0001, SpotiKona#0001, and its a-me markio#9733 for Discord Hack Week.')
     .addField('GitHub', 'https://github.com/trivia-hub/RedditCord')
+    .addField('Support Server', 'https://discord.gg/yRwEr2')
     .setFooter('For command help run +help');
   msg.channel.send(embed);
 };
