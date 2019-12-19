@@ -213,4 +213,16 @@ export default class Reddit extends EventEmitter {
 
     return JSON.parse(body);
   }
+
+  async getPost(url) {
+    const { body, statusCode } = await this.req(`${url}/.json`, {
+      headers: {
+        'User-Agent': 'RedditCord v1.0 (by u/vilP1l)',
+      },
+    });
+
+    if (statusCode !== 200) return null;
+
+    return JSON.parse(body)[0];
+  }
 }
