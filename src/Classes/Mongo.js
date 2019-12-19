@@ -29,11 +29,25 @@ export default class Mongo extends EventEmitter {
     return user;
   }
 
+  async getGuild(id) {
+    if (!this.db) throw new Error('No database connection is currently active.');
+    const guild = await this.db.collection('guilds').findOne({ id });
+    return guild;
+  }
+
   async updateUser(id, data) {
     if (!this.db) throw new Error('No database connection is currently active.');
     await this.initUser(id);
     await this.db.collection('users').updateOne({ id }, { $set: data });
     this.emit('userUpdated', data);
+    return true;
+  }
+
+  async updateGuild(id, data) {
+    if (!this.db) throw new Error('No database connection is currently active.');
+    await this.initGuild(id);
+    await this.db.collection('guilds').updateOne({ id }, { $set: data });
+    this.emit('guildUpdated', data);
     return true;
   }
 
@@ -46,6 +60,19 @@ export default class Mongo extends EventEmitter {
         oauth: null,
       });
       this.emit('userCreated', id);
+      return true;
+    }
+    return false;
+  }
+
+  async initGuild(id) {
+    if (!this.db) throw new Error('No database connection is currently active.');
+    if (!await this.getGuild(id)) {
+      await this.db.collection('guilds').insertOne({
+        id,
+        feeds: [],
+      });
+      this.emit('guildCreated', id);
       return true;
     }
     return false;
